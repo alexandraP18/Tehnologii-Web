@@ -1,0 +1,60 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: RLE compression
+      id: rle-compression
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: RLE compression
+        setup-command: npm install
+        command: npm run test-rle-comp
+        timeout: 2
+        max-score: 25
+    - name: RLE decompression
+      id: rle-decompression
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: RLE decompression
+        setup-command: npm install
+        command: npm run test-rle-decomp
+        timeout: 2
+        max-score: 25
+    - name: Caesar crypt
+      id: caesar-crypt
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Caesar crypt
+        setup-command: npm install
+        command: npm run test-caesar-crypt
+        timeout: 2
+        max-score: 25
+    - name: Caesar decrypt
+      id: caesar-decrypt
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Caesar decrypt
+        setup-command: npm install
+        command: npm run test-caesar-decrypt
+        timeout: 2
+        max-score: 25
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        RLE-COMPRESSION_RESULTS: "${{steps.rle-compression.outputs.result}}"
+        RLE-DECOMPRESSION_RESULTS: "${{steps.rle-decompression.outputs.result}}"
+        CAESAR-CRYPT_RESULTS: "${{steps.caesar-crypt.outputs.result}}"
+        CAESAR-DECRYPT_RESULTS: "${{steps.caesar-decrypt.outputs.result}}"
+      with:
+        runners: rle-compression,rle-decompression,caesar-crypt,caesar-decrypt
