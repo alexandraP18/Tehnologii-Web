@@ -1,3 +1,13 @@
+// in folder-ul test, fisierul rle-decomp.test.js, la aceste linii:
+// it("returns correct value for string 3A2B1C4D", function () {
+//         const result = textProcessor("rle", false, "AAABBCDDDD");
+//         assert.strictEqual(result, "AAABBCDDDD");
+//     });
+// exista o eroare. Deoarece noi dorim sa facem decompress, input-ul ar fi trebuit sa fie 
+// cel de la care obtinem noi rezultatul "AAABBCDDDD", si anume "3A2B1C4D", insa acesta nu este cazul.
+// testul nu va functiona in acest context, decat daca in fisier, va fi modificata acea linie. 
+// daca este modificata, testul ruleaza perfect.
+
 
 class InvalidType extends Error{
     constructor(message="InvalidType"){
